@@ -1,14 +1,14 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function Button({title}) {
+export default function Button({ title, OnPress }) {
   return (
     <View>
-      <Pressable style={styles.button}>
+      <Pressable onPress={OnPress} style={styles.button}>
         <Text style={styles.text}> {title} </Text>
       </Pressable>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 4,
-    backgroundColor: 'black',
-    width: '100%',
+    backgroundColor: "black",
+    width: "100%",
   },
   text: {
     fontSize: 16,
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
 });
