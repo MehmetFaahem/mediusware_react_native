@@ -1,25 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import Card from "./Card";
 import Button from "./Button";
 import { Button as RnButton } from "react-native";
 import Popup from "./Popup";
+import Checkbox from "expo-checkbox";
 
-const Phase = ({ phase }) => {
-  const [visible, setVisible] = useState(false);
-  const getterFunc = (details) => {
-    const find_card = phase.cards.find((data) => data.id == details.id);
-
-    find_card.title = details.title;
-    find_card.description = details.description;
-    console.log(find_card);
-  };
-
+const Phase = ({ phase, getDetailsFunc }) => {
+  const [selectedPhase, setSelectedPhase] = useState([]);
   const [Datas, setDatas] = useState({
     id: Date.now(),
     title: "",
     description: "",
+    date: "",
   });
+  const [visible, setVisible] = useState(false);
+  const getterFunc = (details) => {
+    const find_card = phase.cards.find((data) => data.id == details.id);
+    find_card.title = details.title;
+    find_card.description = details.description;
+    getDetailsFunc(details);
+    console.log(find_card);
+  };
+
+  const [isChecked, setChecked] = useState(false);
 
   const openPopup = () => {
     setVisible(true);
@@ -33,17 +37,35 @@ const Phase = ({ phase }) => {
     phase.cards.push(Datas);
     closePopup();
   };
+
+  const handleSelect = () => {
+    if (isChecked) {
+      selectedPhase.push(phase);
+      console.log(selectedPhase);
+    }
+  };
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>{phase.title}</Text>
-          <RnButton title="..." color={"#fff"} />
+          <Checkbox
+            style={styles.checkbox}
+            value={isChecked}
+            onValueChange={setChecked}
+            onChange={handleSelect}
+            color={isChecked ? "#4630EB" : undefined}
+          />
         </View>
 
         <ScrollView>
           {phase.cards?.map((card) => (
-            <Card getterFunc={getterFunc} key={card.id} card={card} />
+            <Card
+              PhaseTitle={phase.title}
+              getterFunc={getterFunc}
+              key={card.id}
+              card={card}
+            />
           ))}
           <Button OnPress={openPopup} title={"+ Add card"} />
         </ScrollView>

@@ -37,6 +37,14 @@ const App = () => {
     setVisible(false);
   };
 
+  const getDetailsFunc = (details) => {
+    const find_phase = phases.find((data) => data.title == details.tag);
+
+    find_phase?.cards.push(details);
+    console.log("phase:", find_phase);
+    closePopup();
+  };
+
   const Add = () => {
     phases.push(Datas);
     closePopup();
@@ -50,7 +58,7 @@ const App = () => {
       <Text style={styles.title}>MW - TODO</Text>
       <ScrollView horizontal style={styles.container}>
         {phases.map((phase) => (
-          <Phase key={phase.id} phase={phase} />
+          <Phase getDetailsFunc={getDetailsFunc} key={phase.id} phase={phase} />
         ))}
         <Button OnPress={openPopup} title={"+ Add phase"} />
       </ScrollView>

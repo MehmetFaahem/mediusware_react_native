@@ -1,12 +1,18 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Button({ title, OnPress }) {
   return (
     <View>
-      <Pressable onPress={OnPress} style={styles.button}>
+      <TouchableOpacity onPress={OnPress} style={styles.button}>
         <Text style={styles.text}> {title} </Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -18,6 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "black",
     width: "100%",
+    marginTop: 10,
   },
   text: {
     fontSize: 16,

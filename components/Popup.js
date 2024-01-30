@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   modalContent: {
     justifyContent: "center",
     marginVertical: "100%",
+    alignContent: "center",
+    alignItems: "center",
+    marginTop: 250,
   },
   modalOverlay: {
     position: "absolute",

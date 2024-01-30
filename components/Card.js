@@ -9,13 +9,63 @@ import {
 import Popup from "./Popup";
 import Button from "./Button";
 
-const Card = ({ card, getterFunc }) => {
+let date = new Date();
+function formatDate() {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+}
+
+const Card = ({ card, getterFunc, PhaseTitle }) => {
   const [visible, setVisible] = useState(false);
   const [details, setDetails] = useState({
     id: card.id,
-    title: "",
-    description: "",
+    title: card.title,
+    description: card.description,
+    date: "",
+    tag: "",
   });
+
+  const MoveToComp = async () => {
+    await setDetails({
+      id: card.id,
+      title: card.title,
+      description: card.description,
+      date: formatDate(),
+      tag: "Completed",
+    });
+    getterFunc(details);
+  };
+
+  const TransButtons = () => {
+    if (PhaseTitle == "Todo") {
+      return (
+        <>
+          <Button OnPress={MoveToComp} title={"Move To Completed"} />
+          <Button title={"Move To Progress"} />
+        </>
+      );
+    } else if (PhaseTitle == "In Progress") {
+      return (
+        <>
+          <Button title={"Move To Todo"} />
+          <Button title={"Move To Completed"} />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Button title={"Move To Todo"} />
+          <Button title={"Move To Progress"} />
+        </>
+      );
+    }
+  };
 
   const openPopup = () => {
     setVisible(true);
@@ -27,6 +77,10 @@ const Card = ({ card, getterFunc }) => {
 
   const Edit = () => {
     getterFunc(details);
+    closePopup();
+  };
+
+  const Delete = () => {
     closePopup();
   };
   return (
@@ -42,6 +96,7 @@ const Card = ({ card, getterFunc }) => {
         margin={"25%"}
       >
         <View style={styles.popupContent}>
+          <TransButtons />
           <TextInput
             placeholder={card.title}
             key={card.title}
@@ -58,6 +113,7 @@ const Card = ({ card, getterFunc }) => {
           />
 
           <Button OnPress={Edit} title={"Edit"} />
+          <Button OnPress={Delete} title={"Delete"} />
         </View>
       </Popup>
     </TouchableOpacity>
@@ -100,7 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderColor: "#000",
     borderWidth: 1,
-    height: 300,
+    height: 400,
     width: 300,
   },
 });
